@@ -19,8 +19,8 @@ exports.Admin= async (req, res) => {
 
 exports.stores= async (req, res) => {
     try {
-        const { name, email, address } = req.body;
-        const newStore = new Store({ name, email, address, rating: 0 });
+        const { name, email, address, owner } = req.body;
+        const newStore = new Store({ name, email, address,owner, averageRating: 0 });
         await newStore.save();
         res.status(201).json({ message: "Store added successfully" });
       } catch (err) {
@@ -48,10 +48,11 @@ exports.adminStoreFiltering= async (req, res) => {
 // Admin: View all users with filtering
 exports.adminUsers= async (req, res) => {
   try {
-    const { name, email, role } = req.query;
+    const { name, email, address,role } = req.query;
     let filters = {};
     if (name) filters.name = { $regex: name, $options: "i" };
     if (email) filters.email = { $regex: email, $options: "i" };
+    if (address) filters.address = { $regex: address, $options: "i" };
     if (role) filters.role = role;
 
     const users = await User.find(filters);
@@ -117,3 +118,5 @@ exports.ViewRatingofRatings = async (req, res) => {
     res.status(500).json({ message: "Error fetching store ratings", error: err.message });
   }
 };
+
+

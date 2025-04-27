@@ -7,6 +7,8 @@ import AdminDashboard from "../src/Pages/AdminDashboard/Admin";
 import UserDashboard from "../src/Pages/UserDashboard/User";
 import StoreOwnerDashboard from "../src/Pages/storeOwnerDashborad/store";
 import ProtectedRoute from "../src/Component/ProtectRoute/Protectedroute";
+import forgotpassword from '../src/Component/ForgotPassword/forgotpassword';
+import ForgotPassword  from "../src/Component/ForgotPassword/forgotpassword"
 
 const AllRouter = () => {
   return (
@@ -26,7 +28,9 @@ const AllRouter = () => {
           path="/store-owner"
           element={<ProtectedRoute role="store_owner"><StoreOwnerDashboard /></ProtectedRoute>}
         />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
+      
     </Router>
   )
 }

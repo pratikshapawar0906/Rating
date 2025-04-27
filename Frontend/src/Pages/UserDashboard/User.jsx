@@ -35,7 +35,7 @@ const User = () => {
   return (
     <>
       <div className="container mt-5">
-      <h2>Store Listings</h2>
+      <h2 className='text-center text-warning  '>Store Listings</h2>
       {stores.map((store) => (
         <div key={store._id} className="card mt-3 p-3">
           <h5>{store.name}</h5>

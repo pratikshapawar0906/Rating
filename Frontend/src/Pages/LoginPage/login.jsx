@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css"
+import { toast } from "react-toastify"
 
 
 const login = () => {
@@ -76,6 +77,9 @@ const login = () => {
               Login
             </button>
           </form>
+          <p className="forgot-password-text">
+            <a href="/forgot-password">Forgot Password?</a>
+          </p>
           <p className="login-footer">
             Don't have an account? <a href="/signup">Sign Up</a>
           </p>

@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login } = require('../controllers/UserController');
+const { register, login, forgotPassword } = require('../controllers/UserController');
 const router = express.Router();
 const { check} = require("express-validator");
 const { authMiddleware, roleMiddleware } = require("../middleware/authMiddleware");
@@ -23,6 +23,8 @@ router.post("/login",[
   check("password", "Password is required").exists(),
 ],login)
 
+router.post('/forgot-password', forgotPassword);
+
 
 // *************************************************************************
 // admin panal
@@ -31,7 +33,7 @@ router.post("/login",[
 router.get("/admin/dashboard", authMiddleware, roleMiddleware(["admin"]), Admin);
 
 // Example: Normal User route  // Admin: Add a new store
-router.get("/stores", authMiddleware, roleMiddleware(["user", "admin", "storeOwner"]), stores);
+router.post("/stores", authMiddleware, roleMiddleware(["user", "admin", "storeOwner"]), stores);
 
 
 // Admin: View all stores with filtering
@@ -42,7 +44,7 @@ router.get("/admin/stores", authMiddleware, roleMiddleware(["admin"]), adminStor
 router.get("/admin/users", authMiddleware, roleMiddleware(["admin"]), adminUsers);
 
 // Normal User: View all stores
-router.get("/stores", authMiddleware, roleMiddleware(["user", "admin", "storeOwner"]), Allstores);
+router.get("/allstores", authMiddleware, roleMiddleware(["user", "admin", "storeOwner"]), Allstores);
 
 // Normal User: Submit a rating
 router.post("/stores/:id/rate", authMiddleware, roleMiddleware(["user"]), SubmitRating);

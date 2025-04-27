@@ -31,7 +31,7 @@ const store = () => {
       <table className="table">
         <thead>
           <tr>
-            <th>User</th>
+            <th>User </th>
             <th>Rating</th>
           </tr>
         </thead>
