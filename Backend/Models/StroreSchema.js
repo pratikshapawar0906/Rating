@@ -2,24 +2,31 @@ const mongoose = require("mongoose");
 
 const StoreSchema = new mongoose.Schema({
   name: { type: String,
-     required: true 
+     required: true,
+     minlength: 2, 
+     maxlength: 120, 
+     trim: true 
     },
   email: { type: String,
      required: true,
      unique: true,
+     lowercase: true,
+     trim: true,
      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
      },
   address: { type: String,
      required: true,
-    maxlength: 400,
+     maxlength: 400,
+     default: "" 
    },
-  owner: { type: mongoose.Schema.Types.ObjectId,
+  owner: { 
+     type: mongoose.Schema.Types.ObjectId,
      ref: "User",
     required: true,
    }, // Store Owner
   ratings: [
     { 
-        type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
      ref: "Rating" 
     }
   ],
@@ -29,6 +36,7 @@ const StoreSchema = new mongoose.Schema({
   },
 });
 
+// helpful for search
 
 
 // Prevent overwriting the model if it already exists

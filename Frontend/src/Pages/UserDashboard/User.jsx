@@ -7,13 +7,13 @@ const User = () => {
 
   useEffect(() => {
     const fetchStores = async () => {
-      const res = await axios.get("http://localhost:8000/api/stores");
+      const res = await axios.get("http://localhost:8000/api/stores/allstores");
       setStores(res.data);
     };
 
     const fetchUserRatings = async () => {
-      const res = await axios.get("http://localhost:8000/api/stores/:id/rate", {
-        headers: { Authorization: localStorage.getItem("token") },
+      const res = await axios.get("http://localhost:8000/api/user/ratings", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
       });
       setUserRatings(res.data);
     };
@@ -24,9 +24,9 @@ const User = () => {
 
   const handleRating = async (storeId, ratingValue) => {
     await axios.post(
-      "http://localhost:8000/api/ratings",
+      "http://localhost:8000/api/rate",
       { storeId, rating: ratingValue },
-      { headers: { Authorization: localStorage.getItem("token") } }
+      { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
     );
 
     setUserRatings({ ...userRatings, [storeId]: ratingValue });

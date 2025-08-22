@@ -1,27 +1,34 @@
 const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  name: { type: String, 
+  name: { 
+         type: String, 
          required: true,
-         minlength: 15,
-          maxlength: 60 },
-  email: { type: String,
+         minlength: 3,
+         maxlength: 60,
+         trim: true
+        },
+  email: { 
+     type: String,
      required: true,
-      unique: true ,
+     lowercase: true,
+     unique: true,
+     trim: true,
      match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, // Email validation
-   },
-  password: { type: String,
+    },
+  password: { 
+     type: String,
      required: true,
       minlength: 8,
        maxlength: 255
     },
-  address: { type: String,
-     required: true,
-      maxlength: 400
+  address: { 
+    type: String,
+      maxlength: 400,
+      default: ""
     },
   role: { type: String,
      enum: ["admin", "user", "store_owner"], 
-     required: true,
      default: "user" 
     },
   store: {
@@ -30,6 +37,8 @@ const UserSchema = new mongoose.Schema({
       default: null, // Only applicable for Store Owners
     },
 });
+
+
 
 // Prevent overwriting the model if it already exists
 const User = mongoose.models.User || mongoose.model("User", UserSchema);

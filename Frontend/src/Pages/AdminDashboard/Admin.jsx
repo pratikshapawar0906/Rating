@@ -11,6 +11,7 @@ const Admin = () => {
   const [userType, setUserType] = useState(""); // Normal, Store, Admin
   const [storeFilters, setStoreFilters] = useState({ name: "", email: "", address: "" });
   const [userFilters, setUserFilters] = useState({ name: "", email: "", address: "", role: "" });
+  const [activeTab, setActiveTab] = useState("stores");
 
   useEffect(() => {
     fetchStats();
@@ -262,136 +263,158 @@ const Admin = () => {
         </div>
       )}
       <div className="container my-5">
-        <h2>Stores List</h2>
-        {/* Store Filters */}
-        <div className="mb-3 row">
-          <div className="col-md-4">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Filter by Name"
-              name="name"
-              value={storeFilters.name}
-              onChange={handleStoreFilterChange}
-            />
-          </div>
-          <div className="col-md-4">
-            <input
-              type="text"
-              className="form-control mt-2"
-              placeholder="Filter by Email"
-              name="email"
-              value={storeFilters.email}
-              onChange={handleStoreFilterChange}
-            />
-          </div>
-          <div className="col-md-4">
-            <input
-              type="text"
-              className="form-control mt-2"
-              placeholder="Filter by Address"
-              name="address"
-              value={storeFilters.address}
-              onChange={handleStoreFilterChange}
-            />
-          </div>
-        </div>
+      <h2>Store & User Lists</h2>
 
-      
-        {/* Store Table */}
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Address</th>
-              <th>Rating</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stores.map((store) => (
-              <tr key={store._id}>
-                <td>{store.name}</td>
-                <td>{store.email}</td>
-                <td>{store.address}</td>
-                <td>{store.averageRating || "N/A"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <h2 className="mt-5">Users List</h2>
-        {/* User Filters */}
-        <div className="mb-3 row">
-          <div className="col-md-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Filter by Name"
-              name="name"
-              value={userFilters.name}
-              onChange={handleUserFilterChange}
-            />
-          </div>
-          <div className="col-md-3">
-            <input
-              type="text"
-              className="form-control mt-2"
-              placeholder="Filter by Email"
-              name="email"
-              value={userFilters.email}
-              onChange={handleUserFilterChange}
-            />
-          </div>
-          <div className="col-md-3">
-            <input
-              type="text"
-              className="form-control mt-2"
-              placeholder="Filter by Address"
-              name="address"
-              value={userFilters.address}
-              onChange={handleUserFilterChange}
-            />
-          </div>
-          <div className="col-md-3">
-            <select
-              className="form-control mt-2"
-              name="role"
-              value={userFilters.role}
-              onChange={handleUserFilterChange}
-            >
-              <option value="">Filter by Role</option>
-              <option value="admin">Admin</option>
-              <option value="storeOwner">Store Owner</option>
-              <option value="user">User</option>
-            </select>
-          </div>
-        </div>
-      
-        {/* User Table */}
-        <table className="table table-bordered">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Address</th>
-              <th>Role</th>
-              <th>Store Rating</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user._id}>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>{user.address}</td>
-                <td>{user.role}</td>
-                <td>{user.store ? user.store.averageRating : "N/A"}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Toggle Buttons */}
+      <div className="mb-4">
+        <button
+          className={`btn ${activeTab === "stores" ? "btn-primary" : "btn-outline-primary"} me-2`}
+          onClick={() => setActiveTab("stores")}
+        >
+          Stores
+        </button>
+        <button
+          className={`btn ${activeTab === "users" ? "btn-primary" : "btn-outline-primary"}`}
+          onClick={() => setActiveTab("users")}
+        >
+          Users
+        </button>
       </div>
+
+      {/* Conditional Rendering */}
+      {activeTab === "stores" ? (
+        <>
+          {/* Store Filters */}
+          <div className="mb-3 row">
+            <div className="col-md-4">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Filter by Name"
+                name="name"
+                value={storeFilters.name}
+                onChange={handleStoreFilterChange}
+              />
+            </div>
+            <div className="col-md-4">
+              <input
+                type="text"
+                className="form-control mt-2"
+                placeholder="Filter by Email"
+                name="email"
+                value={storeFilters.email}
+                onChange={handleStoreFilterChange}
+              />
+            </div>
+            <div className="col-md-4">
+              <input
+                type="text"
+                className="form-control mt-2"
+                placeholder="Filter by Address"
+                name="address"
+                value={storeFilters.address}
+                onChange={handleStoreFilterChange}
+              />
+            </div>
+          </div>
+
+          {/* Store Table */}
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+              {stores.map((store) => (
+                <tr key={store._id}>
+                  <td>{store.name}</td>
+                  <td>{store.email}</td>
+                  <td>{store.address}</td>
+                  <td>{store.averageRating || "N/A"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      ) : (
+        <>
+          {/* User Filters */}
+          <div className="mb-3 row">
+            <div className="col-md-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Filter by Name"
+                name="name"
+                value={userFilters.name}
+                onChange={handleUserFilterChange}
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="text"
+                className="form-control mt-2"
+                placeholder="Filter by Email"
+                name="email"
+                value={userFilters.email}
+                onChange={handleUserFilterChange}
+              />
+            </div>
+            <div className="col-md-3">
+              <input
+                type="text"
+                className="form-control mt-2"
+                placeholder="Filter by Address"
+                name="address"
+                value={userFilters.address}
+                onChange={handleUserFilterChange}
+              />
+            </div>
+            <div className="col-md-3">
+              <select
+                className="form-control mt-2"
+                name="role"
+                value={userFilters.role}
+                onChange={handleUserFilterChange}
+              >
+                <option value="">Filter by Role</option>
+                <option value="admin">Admin</option>
+                <option value="storeOwner">Store Owner</option>
+                <option value="user">User</option>
+              </select>
+            </div>
+          </div>
+
+          {/* User Table */}
+          <table className="table table-bordered">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Role</th>
+                <th>Store Rating</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user._id}>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.address}</td>
+                  <td>{user.role}</td>
+                  <td>{user.store ? user.store.averageRating : "N/A"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </>
+      )}
+    </div>
 
     </div>
   );
