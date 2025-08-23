@@ -24,12 +24,6 @@ const StoreSchema = new mongoose.Schema({
      ref: "User",
     required: true,
    }, // Store Owner
-  ratings: [
-    { 
-      type: mongoose.Schema.Types.ObjectId,
-     ref: "Rating" 
-    }
-  ],
   averageRating: {
     type: Number,
     default: 0,

@@ -1,7 +1,7 @@
 const Rating = require ("../Models/RatingSchema.js");
 const Store =require ("../Models/StroreSchema.js");
 
-const recalcStoreAverage = async (storeId) => {
+exports.recalcStoreAverage = async (storeId) => {
   const agg = await Rating.aggregate([
     { $match: { store: storeId } },
     { $group: { _id: "$store", avg: { $avg: "$score" }, count: { $sum: 1 } } }

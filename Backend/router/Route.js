@@ -2,9 +2,9 @@ const express = require('express');
 const { register, login, forgotPassword, changePassword, logout, getprofile, Updateprofile } = require('../controllers/UserController');
 const router = express.Router();
 const { check} = require("express-validator");
-const { authMiddleware, roleMiddleware } = require("../middleware/authMiddleware");
+const { authMiddleware, roleMiddleware } = require("../Middleware/authMiddleware");
 const {  Admin, stores, adminStoreFiltering, adminUsers, Allstores, SubmitRating, ViewRatingofRatings, addUser  } = require('../controllers/adminController');
-const { AddnewStore, GetAllStores, SubmitRatingUsers, GetStoreRatings, GetUserRatings } = require('../controllers/StoreController');
+const { AddnewStore, GetAllStores, SubmitRatingUsers, GetStoreRatings } = require('../controllers/StoreController');
 const { signupValidator, loginValidator, changePasswordValidator, ratingValidator, listQueryValidator, createStoreValidator } = require('../utils/validators');
 const { validate } = require('../Models/UserSchema');
 const { upsertMyRating, listRatersForMyStore } = require('../controllers/ratingController');
@@ -95,7 +95,7 @@ router.post("/rate", authMiddleware, roleMiddleware(["user"]), SubmitRatingUsers
 
 // Get store ratings (Store Owner)
 router.get("/stores/ratings", authMiddleware, roleMiddleware(["store_owner"]), GetStoreRatings);
-router.get("/user/ratings", authMiddleware, roleMiddleware(["user"]), GetUserRatings);
+
 
 
 
