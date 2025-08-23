@@ -47,46 +47,37 @@ exports.SubmitRatingUsers=async (req, res) => {
   }
 };
 
-// // All authenticated users can see stores
-// // Also include "myRating" for current user if exists
-// exports.listStores = async (req, res) => {
-//   const filter = buildStoreFilter(req);
-//   const sort = getSort(req, "name");
-//   const { limit, skip, page } = getPagination(req);
-
-//   const [items, total] = await Promise.all([
-//     Store.find(filter).sort(sort).skip(skip).limit(limit),
-//     Store.countDocuments(filter)
-//   ]);
-
-//   // Attach my rating (one small extra query per store; fine for small lists; can be optimized)
-//   const userId = req.user?._id;
-//   let withMine = items;
-//   if (userId) {
-//     const ids = items.map(s => s._id);
-//     const myRatings = await Rating.find({ user: userId, store: { $in: ids } });
-//     const map = new Map(myRatings.map(r => [r.store.toString(), r.score]));
-//     withMine = items.map(s => ({
-//       ...s.toObject(),
-//       myRating: map.get(s._id.toString()) || null
-//     }));
-//   }
-
-//   res.json({
-//     page,
-//     total,
-//     count: withMine.length,
-//     items: withMine
-//   });
-// };
 
 // Get store ratings (Store Owner)
 exports.GetStoreRatings= async (req, res) => {
   try {
-    const store = await Store.findById(req.params.id).populate("ratings");
-    res.json(store.ratings);
+    const ownerId = req.user.id;
+
+    // Find the store owned by this user
+    const store = await Store.findOne({ owner: ownerId });
+    if (!store) {
+      return res.status(404).json({ message: "No store found for this owner" });
+    }
+
+    // Find all ratings for this store (correct field names)
+    const ratings = await Rating.find({ store: store._id })
+      .populate("user", "name email"); // not userId
+
+    // Calculate average rating
+    const averageRating =
+      ratings.length > 0
+        ? ratings.reduce((acc, r) => acc + r.rating, 0) / ratings.length
+        : 0;
+
+    res.json({
+      store: store.name,
+      averageRating: averageRating.toFixed(1),
+      totalRatings: ratings.length,
+      ratings,
+    });
   } catch (err) {
-    res.status(500).json({ message: "Error fetching ratings", error: err.message });
+    console.error("Error fetching ratings:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 

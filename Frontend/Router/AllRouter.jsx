@@ -9,13 +9,17 @@ import StoreOwnerDashboard from "../src/Pages/storeOwnerDashborad/store";
 import ProtectedRoute from "../src/Component/ProtectRoute/Protectedroute";
 import forgotpassword from '../src/Component/ForgotPassword/forgotpassword';
 import ForgotPassword  from "../src/Component/ForgotPassword/forgotpassword"
+import Navbar from '../src/Component/NavbarComponent/Navbar';
+import Profile from '../src/Pages/Profile/profile';
 
 const AllRouter = () => {
   return (
     <Router>
+      <Navbar/>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/profile" element={<Profile/>}/>
         <Route
           path="/admin"
           element={<ProtectedRoute role="admin"><AdminDashboard /></ProtectedRoute>}

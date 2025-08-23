@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
+const User = require("../Models/UserSchema");
 require("dotenv").config();
 
 
-const authMiddleware = (req, res, next) => {
+const authMiddleware = async (req, res, next) => {
   const token = req.header("Authorization");
   if (!token) return res.status(401).json({ message: "Access Denied" });
 
@@ -14,7 +15,10 @@ const authMiddleware = (req, res, next) => {
     }
 
     const decoded = jwt.verify(bearer[1], process.env.JWT_SECRET);
-    req.user = decoded;
+    const user = await User.findById(decoded.id).select("-password");
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    req.user = user; // now req.user is full user object
     next();
   } catch (err) {
     res.status(400).json({ message: "Invalid Token" });

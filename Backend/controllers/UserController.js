@@ -62,7 +62,30 @@ exports.login= async (req, res) => {
   }
 };
 
+// Get logged in user profile
+exports.getprofile=async (req, res) => {
+  try {
+    res.json(req.user);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
+//  Update logged in user profile
+exports.Updateprofile= async (req, res) => {
+  try {
+    const { name, address } = req.body;
+
+    // Only allow name + address update (not email, not role)
+    req.user.name = name || req.user.name;
+    req.user.address = address || req.user.address;
+
+    const updatedUser = await req.user.save();
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 exports.forgotPassword = async (req, res) => {
   const { email } = req.body;

@@ -1,5 +1,5 @@
 const express = require('express');
-const { register, login, forgotPassword, changePassword, logout } = require('../controllers/UserController');
+const { register, login, forgotPassword, changePassword, logout, getprofile, Updateprofile } = require('../controllers/UserController');
 const router = express.Router();
 const { check} = require("express-validator");
 const { authMiddleware, roleMiddleware } = require("../middleware/authMiddleware");
@@ -27,6 +27,10 @@ router.post('/forgot-password', forgotPassword);
 
 //logout
 router.post("/logout",authMiddleware, logout)
+
+router.get("/profile",authMiddleware,getprofile);
+
+router.put("/update-profile",authMiddleware,Updateprofile);
 
 
 // *************************************************************************
@@ -90,7 +94,7 @@ router.get("/stores/allstores", GetAllStores);
 router.post("/rate", authMiddleware, roleMiddleware(["user"]), SubmitRatingUsers);
 
 // Get store ratings (Store Owner)
-router.get("/stores/:id/ratings", authMiddleware, roleMiddleware(["store_owner"]), GetStoreRatings);
+router.get("/stores/ratings", authMiddleware, roleMiddleware(["store_owner"]), GetStoreRatings);
 router.get("/user/ratings", authMiddleware, roleMiddleware(["user"]), GetUserRatings);
 
 
