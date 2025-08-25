@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Login.css"
-import { toast } from "react-toastify"
+import { toast, ToastContainer } from "react-toastify"
 
 
 const login = () => {
@@ -35,11 +35,11 @@ const login = () => {
       });
 
       localStorage.setItem("token", res.data.token);
-      localStorage.setItem("role", res.data.role);
 
-      if (res.data.role === "admin") navigate("/admin");
-      else if (res.data.role === "store_owner") navigate("/store-owner");
-      else navigate("/user");
+     const decoded = jwtDecode(res.data.token);
+     if(decoded.role === "admin") navigate("/admin");
+     else if(decoded.role === "store_owner") navigate("/store-owner");
+     else navigate("/user");
     } catch (err) {
       toast.error("Invalid credentials");
     }
@@ -84,6 +84,7 @@ const login = () => {
             Don't have an account? <a href="/signup">Sign Up</a>
           </p>
         </div>
+        <ToastContainer/>
       </div>
     </>
   )

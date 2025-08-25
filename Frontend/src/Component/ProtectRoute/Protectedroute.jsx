@@ -1,14 +1,13 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-
 const ProtectedRoute = ({ role, children }) => {
-  const userRole = localStorage.getItem("role");
+  const token = localStorage.getItem("token");
+  if (!token) return <Navigate to="/" />;
 
-  if (!userRole || userRole !== role) {
+  try {
+    const decoded = jwtDecode(token);
+    if (decoded.role !== role) return <Navigate to="/" />;
+  } catch {
     return <Navigate to="/" />;
   }
 
   return children;
 };
-
-export default ProtectedRoute;

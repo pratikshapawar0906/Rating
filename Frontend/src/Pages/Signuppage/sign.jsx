@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./sign.css";
+import { ToastContainer } from "react-toastify";
 
 const SignUp = () => {
   const [signUpData, setSignUpData] = useState({
@@ -107,6 +108,7 @@ const SignUp = () => {
           Already have an account? <a href="/">Login</a>
         </p>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

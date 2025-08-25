@@ -33,14 +33,11 @@ const Profile = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8000/api/update-profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: localStorage.getItem("token"),
-        },
-        body: JSON.stringify(profile), // 
-      });
+      const res = await axios.put(
+        "http://localhost:8000/api/update-profile",
+        form,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
       if (!res.ok) throw new Error("Update failed");
 
